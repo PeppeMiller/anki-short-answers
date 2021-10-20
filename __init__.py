@@ -1,6 +1,7 @@
 import difflib
 import re
 from unicodedata import category
+from anki.scheduler.v3 import CardAnswer
 
 # import the main window object (mw) from aqt
 from aqt import mw
@@ -15,10 +16,10 @@ from .exceptions import STTError
 from . import sttclients
 
 # Constants:
-WINDOW_NAME = "Test Your Pronunciation"
-SETTINGS_ORGANIZATION = "github_rroessler1"
-SETTINGS_APPLICATION = "stt-anki-plugin"
-STT_CLIENT_SETTING_NAME = "stt-client"
+WINDOW_NAME = "Short Answers"
+SETTINGS_ORGANIZATION = "github_peppemiller"
+SETTINGS_APPLICATION = "shortanswer-anki-plugin"
+STT_CLIENT_SETTING_NAME = "short-client"
 STT_CLIENT_DEFAULT_NAME = "google"
 CHINESE_LANGUAGE_CODES = {'zh-TW', 'zh', 'yue-Hant-HK', 'cmn-Hans-CN', 'cmn-Hant-TW', 'zh-HK', 'zh-CN'}
 LANGUAGES_WITHOUT_SPACES = {
@@ -103,6 +104,9 @@ def diff_and_show_result(to_read_text, tts_result, language_code):
                 heard_pinyin,
                 inline_diff(to_read_text, tts_result, True)
             ), textFormat="rich")
+
+            mw.col.sched.answerCard(mw.col.sched.getCard(), 1)
+            mw.reviewer.nextCard()
         else:
             diff1 = to_read_text.lower() if language_code in LANGUAGES_WITHOUT_SPACES else to_read_text.lower().split()
             diff2 = tts_result.lower() if language_code in LANGUAGES_WITHOUT_SPACES else tts_result.lower().split()
@@ -113,8 +117,12 @@ def diff_and_show_result(to_read_text, tts_result, language_code):
                 tts_result,
                 inline_diff(diff1, diff2)
             ), textFormat="rich")
+            mw.col.sched.answerCard(mw.col.sched.getCard(), 1)
+            mw.reviewer.nextCard()
     else:
         showInfo("Correct! The computer heard you say:<br/>{}".format(tts_result))
+        mw.col.sched.answerCard(mw.col.sched.getCard(), 3)
+        mw.reviewer.nextCard()
 
 
 def inline_diff(a, b, is_chinese: bool = False):
@@ -283,11 +291,13 @@ class SettingsDialog(QDialog):
 app_settings = QSettings(SETTINGS_ORGANIZATION, SETTINGS_APPLICATION)
 stt_provider = STTProvider(app_settings)
 
-cp_action = QAction("Test Your Pronunciation", mw)
+cp_action = QAction("Short Answers", mw)
 cp_action.triggered.connect(test_pronunciation)
 mw.form.menuTools.addAction(cp_action)
 cp_action.setShortcut(QKeySequence("Ctrl+Shift+S"))
 
-cps_action = QAction("Test Your Pronunciation Settings", mw)
+cps_action = QAction("Short Answer Settings", mw)
 cps_action.triggered.connect(settings_dialog)
 mw.form.menuTools.addAction(cps_action)
+
+print('Test')

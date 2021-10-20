@@ -1,0 +1,24 @@
+`{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python 3.8 Anki",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "python": "C:/python/python", // <- Path to your python binary
+            "program": "C:/Users/peppe/OneDrive/Documents/GitHub/anki/qt/runanki.py", // <- Path to your runanki location
+            "cwd": "${workspaceRoot}",
+            "env": {},
+            "envFile": "${workspaceRoot}/.env",
+            "debugOptions": [
+                "RedirectOutput"
+            ],
+            "args": [
+                "-b ."
+            ]        }
+    ]
+}

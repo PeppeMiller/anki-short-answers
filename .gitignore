@@ -1,3 +1,7 @@
 GOOGLE_API_CREDENTIALS.json
 API_KEY.txt
 
+_vendor/**
+venv/**
+__pycache__/**
+.idea/**
